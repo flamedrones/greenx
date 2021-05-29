@@ -15,6 +15,7 @@ import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.tx.RawTransactionManager;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
@@ -41,12 +42,12 @@ public class FGXManager {
         return FunctionEncoder.encode(function);
     }
 
-    public String sendFGX(Integer amount, String toAddress) throws Exception {
+    public String sendFGX(Double amount, String toAddress) throws Exception {
         Web3j web3 = Web3j.build(new HttpService("https://ropsten.infura.io/v3/c2de2798029b4fb584ecd43e74b73ebc"));
         Credentials creds = Credentials.create(this.privateKey);
         RawTransactionManager manager = new RawTransactionManager(web3, creds);
         String contractAddress = this.contractAddress;
-        BigInteger sum = BigInteger.valueOf(amount).multiply(BigInteger.valueOf(1000000000)).multiply(BigInteger.valueOf(10));
+        BigInteger sum = BigDecimal.valueOf(amount).multiply(BigDecimal.valueOf(1000000000)).multiply(BigDecimal.valueOf(10)).toBigInteger();
         String data = encodeTransferData(toAddress, sum);
         BigInteger gasPrice = web3.ethGasPrice().send().getGasPrice();
         BigInteger gasLimit = BigInteger.valueOf(120000); // set gas limit here

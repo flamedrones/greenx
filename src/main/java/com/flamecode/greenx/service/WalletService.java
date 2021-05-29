@@ -95,7 +95,7 @@ public class WalletService {
     }
 
 
-    public Mono<String> sendTokenByEmail(String email, Integer amount) throws FirebaseAuthException {
+    public Mono<String> sendTokenByEmail(String email, Double amount) throws FirebaseAuthException {
         var user = getOrCreateUser(email);
         var dbUser = user.flatMap(userrec -> getOrCreateWalletByUid(userrec.getUid()));
         return dbUser.map(userdb -> {

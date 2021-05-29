@@ -37,6 +37,55 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /drone/order:
+    post:
+      summary: Create a Drone Order
+      operationId: post-droneorder
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+        description: 'Specify Drone Package Position and Dimensions, and the delivery point'
+      description: It Creates a Drone Order
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+    parameters: []
+  /drone/reward:
+    post:
+      summary: Get Reward
+      operationId: post-drone-reward
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  email:
+                    type: string
+                    format: email
+                  tokenAmount:
+                    type: number
+                  orderId:
+                    type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                orderId:
+                  type: string
+      description: Send Email to Backend to Make
 components:
   schemas:
     User:
@@ -70,6 +119,7 @@ components:
       properties:
         id:
           type: string
+          readOnly: true
         status:
           type: string
           enum:
@@ -77,14 +127,11 @@ components:
             - in_delivery
             - complete
             - failed
-        pickup_time:
+          readOnly: true
+        delivery_time:
           type: string
           format: date-time
-        delivery_time:
-          type:
-            - string
-            - 'null'
-          format: date-time
+          readOnly: true
         dimension:
           type: object
           properties:
@@ -115,5 +162,15 @@ components:
         pos:
           type: string
           description: |-
-            current position of drone in lattitude and logitude
+            current position of drone in lattitude and logitude;  
+
+            if creating order, the order pickup location;
+
             see geopoint of firestore
+        pickup_time:
+          type: string
+          format: date-time
+          readOnly: true
+        delivery_pos:
+          type: string
+          description: where the drone should arrive; firestore geopoint

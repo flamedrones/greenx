@@ -43,6 +43,8 @@ dependencies {
 
 	compile 'org.web3j:core:4.8.4'
 	implementation 'com.squareup.okhttp3:okhttp:4.9.1'
+
+	implementation 'com.google.cloud:spring-cloud-gcp-data-firestore'
 }
 
 dependencyManagement {

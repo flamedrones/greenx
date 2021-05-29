@@ -213,3 +213,8 @@ components:
         price:
           type: number
           format: double
+        rewardToken:
+          type: number
+          description: Amount of tokens to receive as reward
+          minimum: 1
+          maximum: 10000

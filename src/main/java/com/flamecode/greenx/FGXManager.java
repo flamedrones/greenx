@@ -20,8 +20,6 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 @Component
@@ -56,8 +54,8 @@ public class FGXManager {
         return transaction.getTransactionHash();
     }
 
-    public static Map<String, String> generateWallet() {
-        var processJson = new HashMap<String, String>();
+    public static com.flamecode.greenx.model.Wallet generateWallet() {
+        var wallet = new com.flamecode.greenx.model.Wallet();
         var seed = UUID.randomUUID().toString();
         try {
             ECKeyPair ecKeyPair = Keys.createEcKeyPair();
@@ -65,12 +63,12 @@ public class FGXManager {
             String sPrivatekeyInHex = privateKeyInDec.toString(16);
             WalletFile aWallet = Wallet.createLight(seed, ecKeyPair);
             String sAddress = aWallet.getAddress();
-            processJson.put("address", "0x" + sAddress);
-            processJson.put("privateKey", sPrivatekeyInHex);
+            wallet.setAddress("0x" + sAddress);
+            wallet.setPrivateKey(sPrivatekeyInHex);
         } catch (CipherException | NoSuchProviderException | NoSuchAlgorithmException | InvalidAlgorithmParameterException e) {
             LOGGER.error("", e);
         }
-        return processJson;
+        return wallet;
     }
 
 }

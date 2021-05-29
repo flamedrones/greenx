@@ -12,6 +12,10 @@ configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
+	all {
+		exclude group: 'ch.qos.logback', module: 'logback-classic'
+
+	}
 }
 
 repositories {
@@ -24,6 +28,7 @@ ext {
 }
 
 dependencies {
+
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	implementation 'com.google.cloud:spring-cloud-gcp-starter'
@@ -42,6 +47,7 @@ dependencies {
 	testImplementation 'io.projectreactor:reactor-test'
 
 	compile 'org.web3j:core:4.8.4'
+	// compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.25'
 	implementation 'com.squareup.okhttp3:okhttp:4.9.1'
 
 	implementation 'com.google.cloud:spring-cloud-gcp-data-firestore'

@@ -73,8 +73,15 @@ paths:
         - schema:
             type: string
           in: query
-          name: search
-          description: search parameter to search for in tickets
+          name: startDest
+          description: The Start Destination
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: stopDest
+          description: The Stop Destination
+          required: true
     parameters: []
   /train/purchase:
     post:

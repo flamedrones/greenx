@@ -18,6 +18,6 @@ class DistanceCalculatorTest {
 
         double distance = DistanceCalculator.computeDistance(cityIasi, cityOnesti);
 
-        assertEquals(200.0, distance);
+        assertEquals(128.35289172880186, distance);
     }
 }

@@ -2,6 +2,7 @@ package com.flamecode.greenx;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.datatypes.Address;
@@ -26,6 +27,11 @@ import java.util.UUID;
 @Component
 public class FGXManager {
 
+    @Value("${fgx.config.privateKey}")
+    String privateKey;
+    @Value("${fgx.config.contractAddress}")
+    String contractAddress;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(FGXManager.class);
 
     public static String encodeTransferData(String toAddress, BigInteger sum) {
@@ -37,11 +43,11 @@ public class FGXManager {
         return FunctionEncoder.encode(function);
     }
 
-    public static String sendFGX(Integer amount, String toAddress) throws Exception {
+    public String sendFGX(Integer amount, String toAddress) throws Exception {
         Web3j web3 = Web3j.build(new HttpService("https://ropsten.infura.io/v3/c2de2798029b4fb584ecd43e74b73ebc"));
-        Credentials creds = Credentials.create("0ae4a89e3ff94d9657720608bef207df20f2d38d73c91646fbfa551a9b6230bf");
+        Credentials creds = Credentials.create(this.privateKey);
         RawTransactionManager manager = new RawTransactionManager(web3, creds);
-        String contractAddress = "0xeea3a661f004016c52b556e8d520d4b843abbc8e";
+        String contractAddress = this.contractAddress;
         BigInteger sum = BigInteger.valueOf(amount).multiply(BigInteger.valueOf(1000000000)).multiply(BigInteger.valueOf(10));
         String data = encodeTransferData(toAddress, sum);
         BigInteger gasPrice = web3.ethGasPrice().send().getGasPrice();

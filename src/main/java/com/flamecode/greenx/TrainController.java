@@ -18,7 +18,10 @@ public class TrainController {
 
         double distance = DistanceCalculator.computeDistance(start, stop);
 
-        return "{\"result\": \""+distance+"\"}";
+        TokenRewardInput rewardInput = new TokenRewardInput(distance, 1);
+        double reward = TokenRewardCalculator.compute(rewardInput);
+
+        return "{\"distance\": \""+String.format("%.2g%n",distance)+"\", \"reward\": "+String.format("%.2g%n",reward)+"}";
     }
 
     private Point getPoint(String location){

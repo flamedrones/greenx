@@ -63,3 +63,57 @@ components:
           format: int32
         message:
           type: string
+    Order:
+      title: Drone Order
+      type: object
+      description: The Firestore Order Object for a Drone Order
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          enum:
+            - pending
+            - in_delivery
+            - complete
+            - failed
+        pickup_time:
+          type: string
+          format: date-time
+        delivery_time:
+          type:
+            - string
+            - 'null'
+          format: date-time
+        dimension:
+          type: object
+          properties:
+            height:
+              type: number
+              format: float
+              description: in cm
+              minimum: 1
+              maximum: 30
+            width:
+              type: number
+              format: float
+              description: in cm
+              minimum: 1
+              maximum: 30
+            weight:
+              type: number
+              format: float
+              minimum: 0.001
+              maximum: 0.5
+              description: in kg
+            length:
+              type: number
+              format: float
+              minimum: 1
+              maximum: 30
+              description: in cm
+        pos:
+          type: string
+          description: |-
+            current position of drone in lattitude and logitude
+            see geopoint of firestore

@@ -2,12 +2,13 @@ package com.flamecode.greenx.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PurchaseTicket {
+public class PurchaseTicket extends Ticket{
     private String email;
-    private Ticket ticket;
 }

@@ -102,10 +102,10 @@ public class TrainController {
 
     @PostMapping(value = "/purchase", produces = "application/json")
     public Mono<PurchaseTicketResponse> purchaseTicket(@RequestBody PurchaseTicket order) throws FirebaseAuthException {
-        LOGGER.info("Purchasing Train Tickets of Value {}", order.getTicket().getRewardToken());
-        return ws.sendTokenByEmail(order.getEmail(), order.getTicket().getRewardToken())
+        LOGGER.info("Purchasing Train Tickets of Value {}", order.getRewardToken());
+        return ws.sendTokenByEmail(order.getEmail(), order.getRewardToken())
                 .map(transactionId -> new PurchaseTicketResponse(
-                        order.getTicket().getRewardToken(),
+                        order.getRewardToken(),
                         transactionId,
                         "https://ropsten.etherscan.io/tx/" + transactionId));
     }

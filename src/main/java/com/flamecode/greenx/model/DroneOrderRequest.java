@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 public class DroneOrderRequest {
     private Dimension dimension;
     private ModelGeoPoint pos;
-    private ModelGeoPoint deliveryPos;
+    private ModelGeoPoint delivery_pos;
 }

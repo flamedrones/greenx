@@ -1,5 +1,6 @@
 package com.flamecode.greenx.model;
 
+import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.GeoPoint;
 import com.google.cloud.firestore.annotation.DocumentId;
 import com.google.cloud.spring.data.firestore.Document;
@@ -13,10 +14,14 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Document(collectionName = "orders")
-public class DBOrder extends DroneOrderRequest {
+public class DBOrder {
     @DocumentId
     private String id;
-    private LocalDateTime delivery_time;
-    private LocalDateTime pickup_time;
+    private GeoPoint original_pos;
+    private Dimension dimension;
+    private GeoPoint pos;
+    private GeoPoint delivery_pos;
+    private Timestamp delivery_time;
+    private Timestamp pickup_time;
     private String status;
 }

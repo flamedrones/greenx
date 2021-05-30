@@ -1,14 +1,16 @@
 package com.flamecode.greenx;
 
+import com.flamecode.greenx.model.PurchaseTicket;
+import com.flamecode.greenx.model.PurchaseTicketResponse;
 import com.flamecode.greenx.model.Ticket;
 import com.flamecode.greenx.model.Time;
+import com.flamecode.greenx.service.WalletService;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.mapbox.api.geocoding.v5.MapboxGeocoding;
 import com.mapbox.api.geocoding.v5.models.GeocodingResponse;
 import com.mapbox.geojson.Point;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -21,9 +23,13 @@ import java.util.List;
 import java.util.Random;
 
 @RestController()
+@RequestMapping("/train")
 public class TrainController {
 
-    @RequestMapping(value = "/train/tickets", method = RequestMethod.GET, produces = "application/json")
+    @Autowired
+    WalletService ws;
+
+    @RequestMapping(value = "/tickets", method = RequestMethod.GET, produces = "application/json")
     public Mono<List<Ticket>> trainTickets(@RequestParam(value = "startDest") String startDestination,
                                            @RequestParam(value = "stopDest") String stopDestination) {
         var mapboxGeocoding = MapboxGeocoding.builder()
@@ -81,6 +87,15 @@ public class TrainController {
             list.add(ticket);
             return list;
         });
+    }
+
+    @PostMapping(value = "/purchase", produces = "application/json")
+    public Mono<PurchaseTicketResponse> purchaseTicket(@RequestBody PurchaseTicket order) throws FirebaseAuthException {
+        return ws.sendTokenByEmail(order.getEmail(), order.getTicket().getRewardToken())
+                .map(transactionId -> new PurchaseTicketResponse(
+                        order.getTicket().getRewardToken(),
+                        transactionId,
+                        "https://ropsten.etherscan.io/tx/" + transactionId));
     }
 
     private Point getPoint(String location) {

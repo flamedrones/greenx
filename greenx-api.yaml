@@ -95,11 +95,11 @@ paths:
               schema:
                 type: object
                 properties:
-                  email:
-                    type: string
                   tokenAmount:
                     type: number
-                  ticketId:
+                  transactionId:
+                    type: string
+                  etherscanUrl:
                     type: string
       requestBody:
         content:
@@ -173,20 +173,13 @@ components:
               maximum: 30
               description: in cm
         pos:
-          type: string
-          description: |-
-            current position of drone in lattitude and logitude;  
-
-            if creating order, the order pickup location;
-
-            see geopoint of firestore
+          $ref: '#/components/schemas/Position'
         pickup_time:
-          type: string
           format: date-time
+          type: string
           readOnly: true
         delivery_pos:
-          type: string
-          description: where the drone should arrive; firestore geopoint
+          $ref: '#/components/schemas/Position'
     Ticket:
       title: Train Ticket
       type: object
@@ -217,3 +210,13 @@ components:
           description: Amount of tokens to receive as reward
           minimum: 1
           maximum: 10000
+    Position:
+      title: Position
+      type: object
+      properties:
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double

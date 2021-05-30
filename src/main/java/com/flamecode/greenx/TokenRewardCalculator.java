@@ -10,7 +10,7 @@ public class TokenRewardCalculator {
         double random = ThreadLocalRandom.current().nextDouble(0.00001, 0.00003);
 
         double tokenValue = 1.0d/random;
-        return tokenValue * input.getDistance() * input.getPricePerUnit();
+        return (tokenValue * input.getDistance() * input.getPricePerUnit())/100000;
 
     }
 

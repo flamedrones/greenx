@@ -5,6 +5,7 @@ import com.google.cloud.spring.data.firestore.repository.config.EnableReactiveFi
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.mapbox.api.geocoding.v5.MapboxGeocoding;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -40,6 +41,12 @@ public class GreenxApplication {
     @Bean
     FirebaseAuth configFirebaseAuth(@Autowired FirebaseApp firebase) {
         return FirebaseAuth.getInstance(firebase);
+    }
+
+    @Bean
+    MapboxGeocoding.Builder configMapboxGeocoding(@Value("${mapbox.accessToken}") String accessToken) {
+        return MapboxGeocoding.builder()
+                .accessToken(accessToken);
     }
 
 }

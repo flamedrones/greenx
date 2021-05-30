@@ -46,6 +46,7 @@ public class WalletService {
     }
 
     public Mono<UserRecord> getUser(String email) throws FirebaseAuthException {
+        // I know this not asynchronous, I haven't yet figured out how to convert ApiFuture to Mono
         return Mono.just(auth.getUserByEmail(email));
     }
 

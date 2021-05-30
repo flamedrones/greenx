@@ -9,6 +9,8 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.mapbox.api.geocoding.v5.MapboxGeocoding;
 import com.mapbox.api.geocoding.v5.models.GeocodingResponse;
 import com.mapbox.geojson.Point;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
@@ -29,9 +31,12 @@ public class TrainController {
     @Autowired
     WalletService ws;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(TrainController.class);
+
     @RequestMapping(value = "/tickets", method = RequestMethod.GET, produces = "application/json")
     public Mono<List<Ticket>> trainTickets(@RequestParam(value = "startDest") String startDestination,
                                            @RequestParam(value = "stopDest") String stopDestination) {
+        LOGGER.info("Looking for train tickets from {} to {}", startDestination, stopDestination);
         var mapboxGeocoding = MapboxGeocoding.builder()
                 .accessToken("pk.eyJ1IjoicmFyZXNwb3BhIiwiYSI6ImNrcDlpcWYwbjBrbG4ydXA3cjBwOG8ycWgifQ.DltEZrDyRw4lb-AqTNeeNw");
         var startDest = Mono.<GeocodingResponse>create(sink -> mapboxGeocoding.query(startDestination).build().enqueueCall(new Callback<>() {
@@ -91,6 +96,7 @@ public class TrainController {
 
     @PostMapping(value = "/purchase", produces = "application/json")
     public Mono<PurchaseTicketResponse> purchaseTicket(@RequestBody PurchaseTicket order) throws FirebaseAuthException {
+        LOGGER.info("Purchasing Train Tickets of Value {}", order.getTicket().getRewardToken());
         return ws.sendTokenByEmail(order.getEmail(), order.getTicket().getRewardToken())
                 .map(transactionId -> new PurchaseTicketResponse(
                         order.getTicket().getRewardToken(),

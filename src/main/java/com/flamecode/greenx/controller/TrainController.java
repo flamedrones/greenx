@@ -1,5 +1,8 @@
-package com.flamecode.greenx;
+package com.flamecode.greenx.controller;
 
+import com.flamecode.greenx.DistanceCalculator;
+import com.flamecode.greenx.TokenRewardCalculator;
+import com.flamecode.greenx.TokenRewardInput;
 import com.flamecode.greenx.model.PurchaseTicket;
 import com.flamecode.greenx.model.PurchaseTicketResponse;
 import com.flamecode.greenx.model.Ticket;

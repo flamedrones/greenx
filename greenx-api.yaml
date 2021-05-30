@@ -110,9 +110,8 @@ paths:
                 email:
                   type: string
                   format: email
-                ticketId:
-                  type: string
-                  format: uuid
+                ticket:
+                  $ref: '#/components/schemas/Ticket'
 components:
   schemas:
     Error:

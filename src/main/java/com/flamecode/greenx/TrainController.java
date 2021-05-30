@@ -23,6 +23,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.IntStream;
 
 @RestController()
 @RequestMapping("/train")
@@ -69,27 +70,29 @@ public class TrainController {
             TokenRewardInput rewardInput = new TokenRewardInput(distance, 1);
             var reward = TokenRewardCalculator.compute(rewardInput);
             Random generator = new Random();
-            var now = LocalDateTime.now().plusDays(1);
-            LocalTime time = LocalTime.MIN.plusSeconds(generator.nextLong());
-            LocalTime time2 = LocalTime.MIN.plusSeconds(generator.nextLong());
-            if (time.compareTo(time2) > 0) {
-                var time3 = time;
-                time = time2;
-                time2 = time3;
-            }
-            var startTime = new Time(now.getMonthValue(), now.getDayOfMonth(), time.getHour(), time.getMinute());
-            var stopTime = new Time(now.getMonthValue(), now.getDayOfMonth(), time2.getHour(), time2.getMinute());
-            var ticket = new Ticket();
-            ticket.setStartDestination(res.getT1().placeName());
-            ticket.setEndDestination(res.getT2().placeName());
-            ticket.setDistance(distance);
-            ticket.setPrice(distance / 10);
-            ticket.setRewardToken(reward);
-            ticket.setTimeLeave(startTime);
-            ticket.setTimeArrive(stopTime);
-            ticket.setPlatform(Integer.toString(generator.nextInt(10)));
             var list = new ArrayList<Ticket>();
-            list.add(ticket);
+            IntStream.range(0, 10).forEachOrdered(n -> {
+                var now = LocalDateTime.now().plusDays(1);
+                LocalTime time = LocalTime.MIN.plusSeconds(generator.nextLong());
+                LocalTime time2 = LocalTime.MIN.plusSeconds(generator.nextLong());
+                if (time.compareTo(time2) > 0) {
+                    var time3 = time;
+                    time = time2;
+                    time2 = time3;
+                }
+                var startTime = new Time(now.getMonthValue(), now.getDayOfMonth(), time.getHour(), time.getMinute());
+                var stopTime = new Time(now.getMonthValue(), now.getDayOfMonth(), time2.getHour(), time2.getMinute());
+                var ticket = new Ticket();
+                ticket.setStartDestination(res.getT1().placeName());
+                ticket.setEndDestination(res.getT2().placeName());
+                ticket.setDistance(distance);
+                ticket.setPrice(distance / 10);
+                ticket.setRewardToken(reward);
+                ticket.setTimeLeave(startTime);
+                ticket.setTimeArrive(stopTime);
+                ticket.setPlatform(Integer.toString(generator.nextInt(10)));
+                list.add(ticket);
+            });
             return list;
         });
     }
